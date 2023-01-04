@@ -14,8 +14,6 @@ class GameManager {
 
     // Set the number of players in the game
     _instance._numPlayers = numPlayers;
-
-    print("Playing a game with $numPlayers players");
   }
 
   // Getter for _numPlayers
@@ -24,4 +22,9 @@ class GameManager {
   // Two decks should be used if there are 7 or more players
   // This is a convenient way to access this value without calculating it outside the GameManager
   static bool useTwoDecks() => _instance._numPlayers >= 7;
+
+  static void submitPlayerNames(List<String> names)
+  {
+    _instance._playerNames = names;
+  }
 }
