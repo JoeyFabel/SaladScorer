@@ -10,20 +10,21 @@ class NameEntryPage extends StatefulWidget {
 }
 
 class _NameEntryPageState extends State<NameEntryPage> {
-  final List<TextEditingController> _controllers = [];
-  final List<FocusNode> _focusNodes = [];
+  final List<TextEditingController> _controllers = []; // This list allows reading of player names
+  final List<FocusNode> _focusNodes = []; // This list allows focus to be put on any empty fields
 
   @override
   void initState()
   {
     super.initState();
+
+    // Initialize the controllers and focusNodes lists
     for (int i = 0; i < GameManager.getNumPlayers(); i++)
     {
       _controllers.add(TextEditingController());
       _focusNodes.add(FocusNode());
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,18 +62,17 @@ class _NameEntryPageState extends State<NameEntryPage> {
                     ),
                     onPressed: () {
                       // Check if each player has a name
-                      bool allNamesEntered = true;
                       for (int i = 0; i < GameManager.getNumPlayers(); i++)
                         {
+                          // If there is a player without a name, prompt for a name
                           if (_controllers[i].text.isEmpty)
                             {
-                              allNamesEntered = false;
                               _focusNodes[i].requestFocus();
-                              break;
+                              return;
                             }
                         }
 
-                      if (allNamesEntered) {
+                        // At this point it is guaranteed that all players have names
                         // Enter all the names into one list
                         List<String> nameList = [];
                         for (var name in _controllers) {
@@ -86,11 +86,6 @@ class _NameEntryPageState extends State<NameEntryPage> {
                           context,
                           MaterialPageRoute(builder: (context) => const RoundOneScoringPage())
                         );
-                      }
-                      else
-                        {
-                          print("not all names entered!");
-                        }
                     }
                   ),
                 );
