@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:salad_scorer/player_selection_page.dart';
+
+import 'how_to_play.dart';
 
 void main() {
   runApp(const MyApp());
@@ -86,7 +89,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 100,
                 child: ElevatedButton(
                   onPressed: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const PlayerSelectionPage())
+                    );
                   },
                   child: const Text(
                     "New Game",
@@ -104,7 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 100,
                 child: ElevatedButton(
                   onPressed: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HowToPlayPage())
+                    );
                   },
                   child: const Text(
                     "How to Play",
