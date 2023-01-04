@@ -50,7 +50,6 @@ class _SetupInstructionPageState extends State<SetupInstructionPage> {
         centerTitle: true,
       ),
       body: Column(
-      //  crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Spacer(),
           Container(
