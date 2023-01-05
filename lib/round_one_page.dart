@@ -85,7 +85,7 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
         toolbarHeight: 100.0,
         title: Column(
           children: const [
-            Text(
+             Text(
               "Round 1:",
               style: TextStyle(
                 fontSize: 35,
@@ -110,41 +110,88 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
             itemCount: GameManager.getNumPlayers() + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == GameManager.getNumPlayers()) {
-                  return SizedBox(
-                    height: 60,
-                    child: ElevatedButton(
-                        child: const Text(
-                          "Continue",
-                          style: TextStyle(
-                            fontSize: 35,
-                            fontFamily: "Rubik",
-                            color: Colors.black,
-                          )
-                      ),
-                      onPressed: () {
-                        try {
-                          bool correctScores = GameManager.validateScores(1, _controllers);
+                  return Row(
+                    children: [
+                      Expanded(
+                        flex: 80,
+                        child: SizedBox(
+                          height: 60,
+                          child: ElevatedButton(
+                              child: const Text(
+                                "Continue",
+                                style: TextStyle(
+                                  fontSize: 35,
+                                  fontFamily: "Rubik",
+                                  color: Colors.black,
+                                )
+                            ),
+                            onPressed: () {
+                              try {
+                                bool correctScores = GameManager.validateScores(1, _controllers);
 
-                          if (correctScores) {
-                            // the scores are good, accept them and then go to the next round
-                            GameManager.acceptScores(1, _controllers);
-                            // TODO - Next round
+                                if (correctScores) {
+                                  // the scores are good, accept them and then go to the next round
+                                  GameManager.acceptScores(1, _controllers);
+                                  // TODO - Next round
+                                }
+                              } on InvalidScoreSumException catch (e) {
+                                showErrorDialog(
+                                    "The scores should add to ${e.targetSum}, but they add to ${e.currentSum}."
+                                );
+                              } on NegativeScoreException catch (e) {
+                                showErrorDialog(
+                                    "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score should not be negative!"
+                                );
+                              } on InvalidIndividualScoreException catch (e) {
+                                showErrorDialog(
+                                    "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score is invalid!"
+                                );
+                              }
+                            }
+                          )
+                        ),
+                      ),
+                      Expanded(
+                        flex: 20,
+                        child: IconButton(
+                          icon: const Icon(Icons.help),
+                          iconSize: 45,
+                          color: const Color.fromARGB(255, 77, 77, 255),
+                          tooltip: "Help",
+                          onPressed: () {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text(
+                                  "Scoring Help",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontFamily: "Rubik",
+                                  )
+                                ),
+                                content: const Text(
+                                  "For this round, every trick a player takes is worth 10 points.\n\n"
+                                  "For example, if you take 3 tricks you will get 30 points.",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  )
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context, "OK"),
+                                    child: const Text(
+                                      "OK",
+                                      style: TextStyle(fontSize: 20)
+                                    ),
+                                  )
+                                ],
+                              )
+                            );
                           }
-                        } on InvalidScoreSumException catch (e) {
-                          showErrorDialog(
-                              "The scores should add to ${e.targetSum}, but they add to ${e.currentSum}."
-                          );
-                        } on NegativeScoreException catch (e) {
-                          showErrorDialog(
-                              "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score should not be negative!"
-                          );
-                        } on InvalidIndividualScoreException catch (e) {
-                          showErrorDialog(
-                              "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score is invalid!"
-                          );
-                        }
-                      }
-                    )
+                        ),
+                      )
+                    ],
                   );
                 }
               else {
