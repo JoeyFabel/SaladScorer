@@ -95,24 +95,24 @@ class GameManager {
       break;
       case 2: // 10 points per heart, with 13 per deck
         if (totalScores != 130 * (useTwoDecks() ? 2 : 1)) {
-          throw InvalidScoreSumException(totalScores, round1CorrectScores[_instance._numPlayers]);
+          throw InvalidScoreSumException(totalScores, 130 * (useTwoDecks() ? 2 : 1));
         }
         break;
       case 3: // 100 per King of Spades, with 1 per deck
       case 4: // 25 per Queen, with 4 per deck
       case 5: // 100 per last trick, with two last tricks if two decks
         if (totalScores != 100 * (useTwoDecks() ? 2 : 1)) {
-          throw InvalidScoreSumException(totalScores, round1CorrectScores[_instance._numPlayers]);
+          throw InvalidScoreSumException(totalScores, 100 * (useTwoDecks() ? 2 : 1));
         }
         break;
       case 6: // 7-Up, 7-Down. Positive and Negative points cancel out for a total of zero
         if (totalScores != 0) {
-          throw InvalidScoreSumException(totalScores, round1CorrectScores[_instance._numPlayers]);
+          throw InvalidScoreSumException(totalScores, 0);
         }
         break;
       case 7:
         if (totalScores != round7CorrectScores[_instance._numPlayers]) {
-          throw InvalidScoreSumException(totalScores, round1CorrectScores[_instance._numPlayers]);
+          throw InvalidScoreSumException(totalScores, round7CorrectScores[_instance._numPlayers]);
         }
         break;
     }

@@ -51,9 +51,9 @@ class _SetupInstructionPageState extends State<SetupInstructionPage> {
       ),
       body: Column(
         children: [
-          Spacer(),
+          const Spacer(),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 15),
+            margin: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(
                 _getInstructions(),
                 style: const TextStyle(
@@ -88,7 +88,7 @@ class _SetupInstructionPageState extends State<SetupInstructionPage> {
               ),
             ],
           ),
-          Spacer()
+          const Spacer()
         ],
       ),
     );

@@ -33,7 +33,7 @@ class _PlayerSelectionPageState extends State<PlayerSelectionPage> {
           children: [
             for (int i = 3; i <= 10; i++) Expanded(
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 width: double.infinity,
                 child: ElevatedButton(
                   child: Text(

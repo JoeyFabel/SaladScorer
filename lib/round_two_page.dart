@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:salad_scorer/game_manager.dart';
 import 'package:salad_scorer/scoring_exceptions.dart';
-import 'package:salad_scorer/round_two_page.dart';
 
-class RoundOneScoringPage extends StatefulWidget {
-  const RoundOneScoringPage({Key? key}) : super(key: key);
+class RoundTwoScoringPage extends StatefulWidget {
+  const RoundTwoScoringPage({Key? key}) : super(key: key);
 
   @override
-  State<RoundOneScoringPage> createState() => _RoundOneScoringPageState();
+  State<RoundTwoScoringPage> createState() => _RoundTwoScoringPageState();
 }
 
-class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
+class _RoundTwoScoringPageState extends State<RoundTwoScoringPage> {
   final List<TextEditingController> _controllers = []; // This list allows reading of player names
 
   void showErrorDialog(String errorMessage)
@@ -49,11 +48,8 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
               // or if its too much work to figure out where the problem lies
               // (although this app should alert the user who has incorrect scores)
               Navigator.pop(context, "OK");
-              GameManager.acceptScores(1, _controllers);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RoundTwoScoringPage())
-              );
+              GameManager.acceptScores(2, _controllers);
+              // TODO - Next round
             },
             child: const Text(
               "Continue anyway",
@@ -90,7 +86,7 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
         title: Column(
           children: const [
              Text(
-              "Round 1:",
+              "Round 2:",
               style: TextStyle(
                 fontSize: 35,
                 fontFamily: "Rubik",
@@ -98,7 +94,7 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
               ),
             ),
             Text(
-                "Every trick is worth 10 points",
+                "Every heart is worth 10 points",
                 style: TextStyle(
                   fontSize: 22.5,
                   fontFamily: "Rubik",
@@ -131,15 +127,12 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
                             ),
                             onPressed: () {
                               try {
-                                bool correctScores = GameManager.validateScores(1, _controllers);
+                                bool correctScores = GameManager.validateScores(2, _controllers);
 
                                 if (correctScores) {
                                   // the scores are good, accept them and then go to the next round
-                                  GameManager.acceptScores(1, _controllers);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const RoundTwoScoringPage())
-                                  );
+                                  GameManager.acceptScores(2, _controllers);
+                                  // TODO - Next round
                                 }
                               } on InvalidScoreSumException catch (e) {
                                 showErrorDialog(
@@ -178,8 +171,9 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
                                   )
                                 ),
                                 content: const Text(
-                                  "For this round, every trick a player takes is worth 10 points.\n\n"
-                                  "For example, if you take 3 tricks you will get 30 points.",
+                                  "For this round, every heart card is worth 10 points. "
+                                  "It does not matter what number is on the card.\n\n"
+                                  "For example, if you take 6 heart cards you will get 60 points.",
                                   style: TextStyle(
                                     fontSize: 25,
                                   )

@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class TrickTakingInstructionPage extends StatefulWidget {
@@ -9,7 +8,7 @@ class TrickTakingInstructionPage extends StatefulWidget {
 }
 
 class _TrickTakingInstructionPageState extends State<TrickTakingInstructionPage> {
-  TextStyle fontStyle = TextStyle(fontSize: 30, color: Colors.white);
+  TextStyle fontStyle = const TextStyle(fontSize: 30, color: Colors.white);
 
   @override
   Widget build(BuildContext context) {
