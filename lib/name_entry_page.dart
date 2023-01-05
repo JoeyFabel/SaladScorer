@@ -23,6 +23,11 @@ class _NameEntryPageState extends State<NameEntryPage> {
     {
       _controllers.add(TextEditingController());
       _focusNodes.add(FocusNode());
+
+      if (GameManager.getPlayerName(i).isNotEmpty)
+        {
+          _controllers[i].text = GameManager.getPlayerName(i);
+        }
     }
   }
 
@@ -99,7 +104,7 @@ class _NameEntryPageState extends State<NameEntryPage> {
                   border: Border.all(color: Colors.black),
                   borderRadius: const BorderRadius.all(Radius.circular(20.0))
               ),
-              margin: const EdgeInsets.only(bottom: 20),
+              margin: const EdgeInsets.only(bottom: 15),
               child: Row(
                 children: [
                   Expanded(
