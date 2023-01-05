@@ -12,6 +12,59 @@ class RoundOneScoringPage extends StatefulWidget {
 class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
   final List<TextEditingController> _controllers = []; // This list allows reading of player names
 
+  void showErrorDialog(String errorMessage)
+  {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        title: const Text(
+          "Oops!",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 30,
+            fontFamily: "Rubik",
+          ),
+        ),
+        content: Text(
+          errorMessage,
+          style: const TextStyle(
+            fontSize: 25,
+            // fontFamily: "Rubik",
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, "Cancel"),
+            child: const Text(
+              "Go back",
+              style: TextStyle(fontSize: 20)
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              // There were incorrect scores, but the user chose to ignore them and continue anyway
+              // This can be useful if someone already got rid of their cards
+              // or if its too much work to figure out where the problem lies
+              // (although this app should alert the user who has incorrect scores)
+              Navigator.pop(context, "OK");
+              GameManager.acceptScores(1, _controllers);
+              // TODO - Next round
+            },
+            child: const Text(
+              "Continue anyway",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.red
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   void initState()
   {
@@ -73,16 +126,22 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
                           bool correctScores = GameManager.validateScores(1, _controllers);
 
                           if (correctScores) {
-                            print("scores are good!");
-                          } else {
-                            print("scores are invalid");
+                            // the scores are good, accept them and then go to the next round
+                            GameManager.acceptScores(1, _controllers);
+                            // TODO - Next round
                           }
                         } on InvalidScoreSumException catch (e) {
-                          print("Error - The scores should add to ${e.targetSum}, but they add to ${e.currentSum}");
+                          showErrorDialog(
+                              "The scores should add to ${e.targetSum}, but they add to ${e.currentSum}."
+                          );
                         } on NegativeScoreException catch (e) {
-                          print("Error - ${GameManager.getPlayerName(e.offendingScoreIndex)}'s score should not be negative!");
+                          showErrorDialog(
+                              "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score should not be negative!"
+                          );
                         } on InvalidIndividualScoreException catch (e) {
-                          print("Error - ${GameManager.getPlayerName(e.offendingScoreIndex)}'s score is invalid!");
+                          showErrorDialog(
+                              "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score is invalid!"
+                          );
                         }
                       }
                     )

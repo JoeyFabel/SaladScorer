@@ -31,7 +31,7 @@ class GameManager {
   int _numPlayers = 0;
 
   List<String> _playerNames = <String>[];
-  List<int> _playerScores = <int>[];
+  late List<List<int>> _playerScores;
 
   // Initialize the GameManager by creating the singleton and setting the number of players
   static void initializeGame(int numPlayers)
@@ -41,6 +41,9 @@ class GameManager {
 
     // Set the number of players in the game
     _instance._numPlayers = numPlayers;
+
+    // Initialize the list of player scores with one list per player, each list with 7 entries
+    _instance._playerScores = List.generate(numPlayers, (i) => List.generate(7, (i) => 0));
   }
 
   // Getter for _numPlayers
@@ -153,5 +156,36 @@ class GameManager {
 
     // The scores have passed all three tests, so they are valid!
     return true;
+  }
+
+  static void acceptScores(int roundNumber, List<TextEditingController> controllers)
+  {
+    List<int> scores = [];
+    // Extract the scores from the controllers
+    for (var controller in controllers) {
+      if (controller.text.isEmpty) {
+        scores.add(0);
+      } else {
+        scores.add(int.parse(controller.text));
+      }
+    }
+
+    for (int i = 0; i < scores.length; i++) {
+      _instance._playerScores[i][roundNumber - 1] = scores[i];
+      //add(scores[i]);
+    }
+
+    print("Accepted scores!");
+    printScores();
+  }
+
+  static void printScores()
+  {
+    for (int i = 0; i < _instance._numPlayers; i++) {
+      print("${getPlayerName(i)}'s scores (${_instance._playerScores[i].length}): ");
+      for (int j = 0; j < _instance._playerScores[i].length; j++) {
+        print("    ${_instance._playerScores[i][j].toString()}");
+      }
+    }
   }
 }
