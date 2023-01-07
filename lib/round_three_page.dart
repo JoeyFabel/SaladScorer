@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:salad_scorer/game_manager.dart';
 import 'package:salad_scorer/scoring_exceptions.dart';
-import 'package:salad_scorer/round_two_page.dart';
+import 'package:salad_scorer/round_scoring_page.dart';
 
-class RoundOneScoringPage extends StatefulWidget {
-  const RoundOneScoringPage({Key? key}) : super(key: key);
+class RoundThreeScoringPage extends StatefulWidget {
+  const RoundThreeScoringPage({Key? key}) : super(key: key);
 
   @override
-  State<RoundOneScoringPage> createState() => _RoundOneScoringPageState();
+  State<RoundThreeScoringPage> createState() => _RoundThreeScoringPageState();
 }
 
-class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
+class _RoundThreeScoringPageState extends State<RoundThreeScoringPage> {
   final List<TextEditingController> _controllers = []; // This list allows reading of player names
+  final int _roundNum = 3;
+  final String _roundDescription = "The King of Spades is worth 100 points";
+  final String _scoringHelpDescription = "For this round, every King of Spades is worth 100 points."
+      "None of the other cards matter.\n\nFor example, if you end the round with the King of Spades "
+      "you will get 100 points.";
 
   void showErrorDialog(String errorMessage)
   {
@@ -49,11 +54,8 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
               // or if its too much work to figure out where the problem lies
               // (although this app should alert the user who has incorrect scores)
               Navigator.pop(context, "OK");
-              GameManager.acceptScores(1, _controllers);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RoundTwoScoringPage())
-              );
+              GameManager.acceptScores(_roundNum, _controllers);
+              // TODO - Next round
             },
             child: const Text(
               "Continue anyway",
@@ -88,22 +90,25 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
         automaticallyImplyLeading: false,
         toolbarHeight: 100.0,
         title: Column(
-          children: const [
+          children: [
              Text(
-              "Round 1:",
-              style: TextStyle(
+              "Round $_roundNum:",
+              style: const TextStyle(
                 fontSize: 35,
                 fontFamily: "Rubik",
                 color: Colors.black
               ),
             ),
-            Text(
-                "Every trick is worth 10 points",
-                style: TextStyle(
-                  fontSize: 22.5,
-                  fontFamily: "Rubik",
-                  color: Colors.black
-                )
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                  _roundDescription,
+                  style: const TextStyle(
+                    fontFamily: "Rubik",
+                    fontSize: 22.5, // Maximum/ideal size
+                    color: Colors.black
+                  )
+              ),
             )
           ],
         ),
@@ -131,15 +136,18 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
                             ),
                             onPressed: () {
                               try {
-                                bool correctScores = GameManager.validateScores(1, _controllers);
+                                bool correctScores = GameManager.validateScores(_roundNum, _controllers);
 
                                 if (correctScores) {
                                   // the scores are good, accept them and then go to the next round
-                                  GameManager.acceptScores(1, _controllers);
+                                  GameManager.acceptScores(_roundNum, _controllers);
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const RoundTwoScoringPage())
+                                    MaterialPageRoute(builder: (context) => const RoundScoringPage(
+                                      roundNum: 4,
+                                    ))
                                   );
+                                  // TODO - Next round
                                 }
                               } on InvalidScoreSumException catch (e) {
                                 showErrorDialog(
@@ -177,10 +185,9 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
                                     fontFamily: "Rubik",
                                   )
                                 ),
-                                content: const Text(
-                                  "For this round, every trick a player takes is worth 10 points.\n\n"
-                                  "For example, if you take 3 tricks you will get 30 points.",
-                                  style: TextStyle(
+                                content: Text(
+                                  _scoringHelpDescription,
+                                  style: const TextStyle(
                                     fontSize: 25,
                                   )
                                 ),

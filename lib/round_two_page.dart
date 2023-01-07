@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:salad_scorer/game_manager.dart';
+import 'package:salad_scorer/round_three_page.dart';
 import 'package:salad_scorer/scoring_exceptions.dart';
 
 class RoundTwoScoringPage extends StatefulWidget {
@@ -49,7 +50,10 @@ class _RoundTwoScoringPageState extends State<RoundTwoScoringPage> {
               // (although this app should alert the user who has incorrect scores)
               Navigator.pop(context, "OK");
               GameManager.acceptScores(2, _controllers);
-              // TODO - Next round
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RoundThreeScoringPage())
+              );
             },
             child: const Text(
               "Continue anyway",
@@ -132,7 +136,10 @@ class _RoundTwoScoringPageState extends State<RoundTwoScoringPage> {
                                 if (correctScores) {
                                   // the scores are good, accept them and then go to the next round
                                   GameManager.acceptScores(2, _controllers);
-                                  // TODO - Next round
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const RoundThreeScoringPage())
+                                  );
                                 }
                               } on InvalidScoreSumException catch (e) {
                                 showErrorDialog(
@@ -209,13 +216,16 @@ class _RoundTwoScoringPageState extends State<RoundTwoScoringPage> {
                         flex: 60,
                         child: Container(
                           margin: const EdgeInsets.only(left: 10, right: 10),
-                          child: Text(
-                              "${GameManager.getPlayerName(index)}'s score:",
-                              textAlign: TextAlign.right,
-                              style: const TextStyle(
-                                // TODO - Change font size if player name too long
-                                fontSize: 22.5,
-                              )
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                "${GameManager.getPlayerName(index)}'s score:",
+                                textAlign: TextAlign.right,
+                                style: const TextStyle(
+                                  fontSize: 22.5,
+                                )
+                            ),
                           ),
                         )
                     ),

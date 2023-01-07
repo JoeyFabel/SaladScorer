@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:salad_scorer/game_manager.dart';
 import 'package:salad_scorer/round_one_page.dart';
+import 'package:salad_scorer/round_scoring_page.dart';
 
 class NameEntryPage extends StatefulWidget {
   const NameEntryPage({Key? key}) : super(key: key);
@@ -89,7 +90,8 @@ class _NameEntryPageState extends State<NameEntryPage> {
                         // Proceed to the first scoring page
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const RoundOneScoringPage())
+                          //MaterialPageRoute(builder: (context) => const RoundOneScoringPage())
+                          MaterialPageRoute(builder: (context) => const RoundScoringPage(roundNum: 1))
                         );
                     }
                   ),

@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:salad_scorer/game_manager.dart';
 import 'package:salad_scorer/scoring_exceptions.dart';
-import 'package:salad_scorer/round_two_page.dart';
 
-class RoundOneScoringPage extends StatefulWidget {
-  const RoundOneScoringPage({Key? key}) : super(key: key);
+class RoundScoringPage extends StatefulWidget {
+  final int roundNum;
+
+  const RoundScoringPage({Key? key, required this.roundNum}) : super(key: key);
 
   @override
-  State<RoundOneScoringPage> createState() => _RoundOneScoringPageState();
+  State<RoundScoringPage> createState() => _RoundScoringPageState();
 }
 
-class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
+class _RoundScoringPageState extends State<RoundScoringPage> {
+
   final List<TextEditingController> _controllers = []; // This list allows reading of player names
+  // int _roundNum = 3;
+   late final String _roundDescription;
+   late final String _scoringHelpDescription;
+  // String _scoringHelpDescription = "For this round, every King of Spades is worth 100 points."
+  //     "None of the other cards matter.\n\nFor example, if you end the round with the King of Spades "
+  //     "you will get 100 points.";
 
   void showErrorDialog(String errorMessage)
   {
@@ -49,11 +57,8 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
               // or if its too much work to figure out where the problem lies
               // (although this app should alert the user who has incorrect scores)
               Navigator.pop(context, "OK");
-              GameManager.acceptScores(1, _controllers);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RoundTwoScoringPage())
-              );
+              GameManager.acceptScores(widget.roundNum, _controllers);
+              // TODO - Next round
             },
             child: const Text(
               "Continue anyway",
@@ -78,6 +83,8 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
       {
         _controllers.add(TextEditingController());
       }
+    _roundDescription = GameManager.getRoundDescription(widget.roundNum);
+    _scoringHelpDescription = GameManager.getScoringDescription(widget.roundNum);
   }
 
   @override
@@ -88,22 +95,25 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
         automaticallyImplyLeading: false,
         toolbarHeight: 100.0,
         title: Column(
-          children: const [
+          children: [
              Text(
-              "Round 1:",
-              style: TextStyle(
+              "Round ${widget.roundNum}:",
+              style: const TextStyle(
                 fontSize: 35,
                 fontFamily: "Rubik",
                 color: Colors.black
               ),
             ),
-            Text(
-                "Every trick is worth 10 points",
-                style: TextStyle(
-                  fontSize: 22.5,
-                  fontFamily: "Rubik",
-                  color: Colors.black
-                )
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                  _roundDescription,
+                  style: const TextStyle(
+                    fontFamily: "Rubik",
+                    fontSize: 22.5, // Maximum/ideal size
+                    color: Colors.black
+                  )
+              ),
             )
           ],
         ),
@@ -131,15 +141,22 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
                             ),
                             onPressed: () {
                               try {
-                                bool correctScores = GameManager.validateScores(1, _controllers);
+                                bool correctScores = GameManager.validateScores(widget.roundNum, _controllers);
 
                                 if (correctScores) {
                                   // the scores are good, accept them and then go to the next round
-                                  GameManager.acceptScores(1, _controllers);
+                                  GameManager.acceptScores(widget.roundNum, _controllers);
+                                  if (widget.roundNum < 7) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const RoundTwoScoringPage())
+                                    MaterialPageRoute(builder: (context) => RoundScoringPage(
+                                      roundNum: widget.roundNum + 1
+                                    ))
                                   );
+                                  } else {
+                                    // Go to the scoring page
+                                    //  TODO - Scoring Page!
+                                  }
                                 }
                               } on InvalidScoreSumException catch (e) {
                                 showErrorDialog(
@@ -169,6 +186,7 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
+                                scrollable: true,
                                 title: const Text(
                                   "Scoring Help",
                                   textAlign: TextAlign.center,
@@ -177,10 +195,9 @@ class _RoundOneScoringPageState extends State<RoundOneScoringPage> {
                                     fontFamily: "Rubik",
                                   )
                                 ),
-                                content: const Text(
-                                  "For this round, every trick a player takes is worth 10 points.\n\n"
-                                  "For example, if you take 3 tricks you will get 30 points.",
-                                  style: TextStyle(
+                                content: Text(
+                                  _scoringHelpDescription,
+                                  style: const TextStyle(
                                     fontSize: 25,
                                   )
                                 ),

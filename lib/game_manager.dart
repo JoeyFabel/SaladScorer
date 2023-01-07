@@ -28,6 +28,66 @@ class GameManager {
     10: 960
   };
 
+  static const Map roundDescriptions = {
+    1: "Every trick is worth 10 points",
+    2: "Every Heart is worth 10 points",
+    3: "The King of Spades is worth 100 points",
+    4: "Every Queen is worth 25 points",
+    51: "The last trick is worth 100 points",
+    52: "The last two tricks are worth 100 points",
+    61: "7-Up, 7-Down (First/Last player out)",
+    62: "7-Up, 7-Down (First two/Last two players out)",
+    71: "The Apocalypse (Scoring of Rounds 1-5)",
+    72: "The Apocalypse (Scoring of Rounds 1-5)",
+  };
+
+  static const Map scoringHelpDescriptions = {
+    1: "For this round, every trick you take is worth 10 points."
+          "The cards in the trick do not matter.\n\n"
+          "For example, if you take 3 tricks you will get 30 points.",
+    2: "For this round, every heart card is worth 10 points. "
+        "It does not matter what number is on the card.\n\n"
+        "For example, if you take 6 heart cards you will get 60 points.",
+    3: "For this round, every King of Spades is worth 100 points."
+        "None of the other cards matter.\n\nFor example, if you end the round with the King of Spades "
+        "you will get 100 points.",
+    4: "For this round, every Queen is worth 25 points. The suit of the Queen does not matter.\n\n"
+        "For example, if you end the round with 3 Queens you will get 75 points",
+    51: "For this round, the last trick is worth 100 points. None of the other tricks matter.\n\n"
+        "For example, if you get the last trick of the round you will get 100 points.",
+    52: "For this round, the last two tricks are worth 100 points each."
+          "None of the other tricks matter.\n\n"
+          "For example, if you take the last two tricks of the round you will get 200 points.",
+    61: "This round you are playing the game 7-Up, 7-Down.\n"
+        "On your turn you can play one card from your hand. If there is nothing on the table, "
+        "you can only play a 7. If there are cards on the table you can play a card of the same suit "
+        "that is either directly above or below that card numerically. If you can't you must pass.\n"
+        "For example, if there is a 7 of Hearts on the table you can play a 6 of Hearts, a 7 of Hearts, "
+        "or another 7 of any suit.\nAces are played above Kings.\n\n"
+        "The first person to run out of cards loses 100 points, and the last person to run out of cards "
+        "gains 100 points.",
+    62: "This round you are playing the game 7-Up, 7-Down.\n"
+        "On your turn you can play one card from your hand. If there is nothing on the table, "
+        "you can only play a 7. If there are cards on the table you can play a card of the same suit "
+        "that is either directly above or below that card numerically. If you can't you must pass\n"
+        "For example, if there is a 7 of Hearts on the table you can play a 6 of Hearts, a 7 of Hearts, "
+        "or another 7 of any suit.\nAces are played above Kings.\n\n"
+        "The first two people to run out of cards lose 100 points, and the last two people "
+        "to run out of cards gain 100 points.",
+    71: "This round is the Apocalypse. The scoring methods of the first five rounds all apply.\n"
+         "- Every trick is worth 10 points.\n"
+         "- Every Heart is worth 10 points.\n"
+         "- The King of Spades is worth 100 points.\n"
+         "- Every Queen is worth 25 points.\n"
+         "- The last trick is worth 100 points.",
+    72: "This round is the Apocalypse. The scoring methods of the first five rounds all apply.\n"
+        "- Every trick is worth 10 points.\n"
+        "- Every Heart is worth 10 points.\n"
+        "- Both King of Spades is worth 100 points.\n"
+        "- Every Queen is worth 25 points.\n"
+        "- The last two tricks are worth 100 points."
+};
+
   int _numPlayers = 0;
 
   List<String> _playerNames = <String>[];
@@ -122,6 +182,15 @@ class GameManager {
       for (int i = 0; i < scores.length; i++) {
         if (scores[i] < 0) throw NegativeScoreException(i);
       }
+    } else {
+      // It is round 6, make sure there is 1 negative score per deck
+      int numNegatives = 0;
+      for (int i = 0; i < scores.length; i++) {
+        if (scores[i] < 0) numNegatives++;
+      }
+
+      // TODO - New Exception for this case
+      if (numNegatives != (useTwoDecks() ? 2: 1)) throw InvalidScoreSumException(0, 1);
     }
 
     // At this point the scores have the correct total. But there could still be errors!
@@ -186,6 +255,24 @@ class GameManager {
       for (int j = 0; j < _instance._playerScores[i].length; j++) {
         print("    ${_instance._playerScores[i][j].toString()}");
       }
+    }
+  }
+
+  static String getRoundDescription(int roundNum)
+  {
+      if (roundNum <= 4) {
+        return roundDescriptions[roundNum];
+      } else {
+        return roundDescriptions[roundNum * 10 + (useTwoDecks() ? 2 : 1)];
+      }
+  }
+
+  static String getScoringDescription(int roundNum)
+  {
+    if (roundNum <= 4) {
+      return scoringHelpDescriptions[roundNum];
+    } else {
+      return scoringHelpDescriptions[roundNum * 10 + (useTwoDecks() ? 2 : 1)];
     }
   }
 }
