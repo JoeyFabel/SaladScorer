@@ -99,6 +99,7 @@ class _NameEntryPageState extends State<NameEntryPage> {
               // This is the container that holds the text and input field for each player
               return Container(
               //color: Colors.green,
+              height: 75,
               decoration: BoxDecoration(
                   color: Colors.green,
                   border: Border.all(color: Colors.black),
@@ -112,7 +113,7 @@ class _NameEntryPageState extends State<NameEntryPage> {
                       child: Text(
                           "Player ${index + 1}'s name: ",
                           style: const TextStyle(
-                            fontSize: 22.5,
+                            fontSize: 25,
                           )
                       )
                   ),
@@ -129,6 +130,7 @@ class _NameEntryPageState extends State<NameEntryPage> {
                           controller: _controllers[index],
                           focusNode: _focusNodes[index],
                           textCapitalization: TextCapitalization.words,
+                          style: const TextStyle(fontSize: 22)
                         ),
                       )
                   )
