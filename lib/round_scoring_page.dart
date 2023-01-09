@@ -40,7 +40,6 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
           errorMessage,
           style: const TextStyle(
             fontSize: 25,
-            // fontFamily: "Rubik",
           ),
         ),
         actions: <Widget>[

@@ -106,7 +106,6 @@ class _NameEntryPageState extends State<NameEntryPage> {
               else {
                 // This is the container that holds the text and input field for each player
                 return Container(
-                //color: Colors.green,
                 height: 75,
                 decoration: BoxDecoration(
                     color: Colors.green,

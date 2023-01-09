@@ -241,7 +241,6 @@ class GameManager {
 
     for (int i = 0; i < scores.length; i++) {
       _instance._playerScores[i][roundNumber - 1] = scores[i];
-      //add(scores[i]);
     }
   }
 

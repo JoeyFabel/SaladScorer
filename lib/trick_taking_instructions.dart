@@ -43,7 +43,6 @@ class _TrickTakingInstructionPageState extends State<TrickTakingInstructionPage>
               " chooses a card from their hand to play, putting it in the middle of the table.\n"
               "     Every other  player, going clockwise from the first player, must play a card from their hand."
               " The card they play ",
-                //style: TextStyle(color: Colors.black, fontSize: 30),
                 style: fontStyle,
               children: const <TextSpan>[
                 TextSpan(

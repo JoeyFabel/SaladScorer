@@ -45,7 +45,7 @@ class _SetupInstructionPageState extends State<SetupInstructionPage> {
         ),
       ),
       child: Scaffold(
-        backgroundColor: Color.fromARGB(75, 255, 255, 255),
+        backgroundColor: const Color.fromARGB(75, 255, 255, 255),
         appBar: AppBar(
           title: Text(
             "Setup (${GameManager.getNumPlayers()} players)",
