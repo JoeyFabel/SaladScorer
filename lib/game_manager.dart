@@ -89,7 +89,7 @@ class GameManager {
 };
 
   int _numPlayers = 0;
-  List<int> _winningPlayers = [];
+  final List<int> _winningPlayers = [];
 
   List<String> _playerNames = <String>[];
   late List<List<int>> _playerScores;
@@ -243,14 +243,10 @@ class GameManager {
       _instance._playerScores[i][roundNumber - 1] = scores[i];
       //add(scores[i]);
     }
-
-    print("Accepted scores!");
-    printScores();
   }
 
   static void calculateWinner() {
     int lowestScore = 99999;
-    print("calculating winner");
 
     for (int i = 0; i < _instance._numPlayers; i++) {
       int totalScore = getFinalScore(i);
@@ -281,14 +277,8 @@ class GameManager {
     return totalScore;
   }
 
-  static void printScores()
-  {
-    for (int i = 0; i < _instance._numPlayers; i++) {
-      print("${getPlayerName(i)}'s scores (${_instance._playerScores[i].length}): ");
-      for (int j = 0; j < _instance._playerScores[i].length; j++) {
-        print("    ${_instance._playerScores[i][j].toString()}");
-      }
-    }
+  static int getScore(int playerIndex, int roundNum) {
+    return _instance._playerScores[playerIndex][roundNum - 1];
   }
 
   static String getRoundDescription(int roundNum)

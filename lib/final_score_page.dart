@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:salad_scorer/detailed_scoring_page.dart';
 import 'package:salad_scorer/game_manager.dart';
 
 import 'main.dart';
@@ -16,6 +17,7 @@ class _FinalScoringPageState extends State<FinalScoringPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text(
           "Results:",
           style: TextStyle(
@@ -31,35 +33,70 @@ class _FinalScoringPageState extends State<FinalScoringPage> {
           itemCount: GameManager.getNumPlayers() + 1,
           itemBuilder: (BuildContext context, int index) {
             if (index == GameManager.getNumPlayers()) {
-              return SizedBox(
-                height: 60,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(45),
-                      )
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: SizedBox(
+                      height: 60,
+                      width: double.infinity, // expand horizontally
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(45),
+                            )
+                          ),
+                        ),
+                        child: const Text(
+                          "Detailed Scoring",
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: "Rubik",
+                            color: Colors.black,
+                          )
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const DetailedScoringPage()),
+                          );
+                        }
+                      ),
                     ),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 4, 98, 7)
-                    )
                   ),
-                  child: const Text(
-                    "Back to Menu",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontFamily: "Rubik",
-                      color: Colors.black,
-                    )
-                  ),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const MyHomePage(title: "Salad Scorer")),
-                        (route) => false
-                    );
-                  }
-                ),
+                  SizedBox(
+                    height: 60,
+                    width: double.infinity, // expand horizontally
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(45),
+                                )
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                const Color.fromARGB(255, 4, 98, 7)
+                            )
+                        ),
+                        child: const Text(
+                            "Back to Menu",
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontFamily: "Rubik",
+                              color: Colors.black,
+                            )
+                        ),
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => const MyHomePage(title: "Salad Scorer")),
+                              (route) => false
+                          );
+                        }
+                    ),
+                  )
+                ],
               );
             } else {
               return Container(
