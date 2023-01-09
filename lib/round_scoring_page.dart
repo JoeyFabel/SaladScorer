@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:salad_scorer/final_score_page.dart';
 import 'package:salad_scorer/game_manager.dart';
 import 'package:salad_scorer/scoring_exceptions.dart';
 
@@ -58,7 +59,14 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
               // (although this app should alert the user who has incorrect scores)
               Navigator.pop(context, "OK");
               GameManager.acceptScores(widget.roundNum, _controllers);
-              // TODO - Next round
+
+              // Go to the next round
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RoundScoringPage(
+                      roundNum: widget.roundNum + 1
+                  ))
+              );
             },
             child: const Text(
               "Continue anyway",
@@ -154,8 +162,12 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                                     ))
                                   );
                                   } else {
-                                    // Go to the scoring page
-                                    //  TODO - Scoring Page!
+                                    // Calculate final scores and go to the scoring page
+                                    GameManager.calculateWinner();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const FinalScoringPage())
+                                    );
                                   }
                                 }
                               } on InvalidScoreSumException catch (e) {
@@ -220,20 +232,21 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                 }
               else {
                 return Container(
-                decoration: BoxDecoration(
+                  height: 75,
+                  decoration: BoxDecoration(
                     color: Colors.green,
-                    border: Border.all(color: Colors.black),
-                    borderRadius: const BorderRadius.all(Radius.circular(20.0))
-                ),
-                margin: const EdgeInsets.only(bottom: 20),
-                child: Row(
-                  children: [
-                    Expanded(
+                    border: Border.all(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
                         flex: 60,
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 10, right: 10),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
                           child: FittedBox(
-                            fit: BoxFit.scaleDown,
+                            fit: BoxFit.fill,
                             alignment: Alignment.centerRight,
                             child: Text(
                                 "${GameManager.getPlayerName(index)}'s score:",
@@ -244,14 +257,14 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                             ),
                           ),
                         )
-                    ),
-                    Expanded(
+                      ),
+                      Expanded(
                         flex: 40,
                         child: Container(
                           margin: const EdgeInsets.only(
                               top: 10, bottom: 10, right: 10),
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
+                            border: Border.all(color: Colors.black, width: 1.5),
                             color: Colors.white,
                           ),
                           child: Container(
@@ -260,15 +273,16 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                               controller: _controllers[index],
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
-                                hintText: "0 points"
-                              )
+                                hintText: "0 points",
+                              ),
+                              style: const TextStyle(fontSize: 22.5),
                             ),
                           ),
                         )
-                    )
-                  ],
-                ),
-              );
+                      )
+                    ],
+                  ),
+                );
               }
             }
           )

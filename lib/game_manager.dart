@@ -89,6 +89,7 @@ class GameManager {
 };
 
   int _numPlayers = 0;
+  List<int> _winningPlayers = [];
 
   List<String> _playerNames = <String>[];
   late List<List<int>> _playerScores;
@@ -187,10 +188,9 @@ class GameManager {
       int numNegatives = 0;
       for (int i = 0; i < scores.length; i++) {
         if (scores[i] < 0) numNegatives++;
-      }
 
-      // TODO - New Exception for this case
-      if (numNegatives != (useTwoDecks() ? 2: 1)) throw InvalidScoreSumException(0, 1);
+        if (numNegatives > (useTwoDecks() ? 2 : 1)) throw NegativeScoreException(i);
+      }
     }
 
     // At this point the scores have the correct total. But there could still be errors!
@@ -216,9 +216,9 @@ class GameManager {
           if (scores[i] % 25 != 0) throw InvalidIndividualScoreException(i);
         }
         break;
-      case 7: // Scores will be added from 10s, 25s, and 100s, so they should evenly divide by 25 or 10
+      case 7: // Scores will be added from 10s, 25s, and 100s, so they should evenly divide by 5
         for (int i = 0; i < scores.length; i++) {
-          if (scores[i] % 25 != 0 && scores[i] % 10 != 0) throw InvalidIndividualScoreException(i);
+          if (scores[i] % 5 != 0) throw InvalidIndividualScoreException(i);
         }
         break;
     }
@@ -246,6 +246,39 @@ class GameManager {
 
     print("Accepted scores!");
     printScores();
+  }
+
+  static void calculateWinner() {
+    int lowestScore = 99999;
+    print("calculating winner");
+
+    for (int i = 0; i < _instance._numPlayers; i++) {
+      int totalScore = getFinalScore(i);
+
+      if (totalScore < lowestScore) {
+        // There is a new lowest score, reset the winners and add just this player
+        _instance._winningPlayers.clear();
+        _instance._winningPlayers.add(i);
+        lowestScore = totalScore;
+      } else if (totalScore == lowestScore) {
+        // There is another player with the same lowest score, add them to the winners list
+        _instance._winningPlayers.add(i);
+      }
+    }
+  }
+
+  static bool isPlayerWinner(int playerIndex) {
+    return _instance._winningPlayers.contains(playerIndex);
+  }
+
+  static int getFinalScore(int playerIndex) {
+    int totalScore = 0;
+
+    for (int score in _instance._playerScores[playerIndex]) {
+      totalScore += score;
+    }
+
+    return totalScore;
   }
 
   static void printScores()
