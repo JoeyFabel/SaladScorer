@@ -97,195 +97,211 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        toolbarHeight: 100.0,
-        title: Column(
-          children: [
-             Text(
-              "Round ${widget.roundNum}:",
-              style: const TextStyle(
-                fontSize: 35,
-                fontFamily: "Rubik",
-                color: Colors.black
-              ),
-            ),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                  _roundDescription,
-                  style: const TextStyle(
-                    fontFamily: "Rubik",
-                    fontSize: 22.5, // Maximum/ideal size
-                    color: Colors.black
-                  )
-              ),
-            )
-          ],
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Salad.jpg'),
+          fit: BoxFit.cover,
         ),
       ),
-      body: Container(
-          margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
-          child: ListView.builder(
-            itemCount: GameManager.getNumPlayers() + 1,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == GameManager.getNumPlayers()) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        flex: 80,
-                        child: SizedBox(
-                          height: 60,
-                          child: ElevatedButton(
-                              child: const Text(
-                                "Continue",
-                                style: TextStyle(
-                                  fontSize: 35,
-                                  fontFamily: "Rubik",
-                                  color: Colors.black,
-                                )
-                            ),
-                            onPressed: () {
-                              try {
-                                bool correctScores = GameManager.validateScores(widget.roundNum, _controllers);
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          toolbarHeight: 100.0,
+          title: Column(
+            children: [
+               Text(
+                "Round ${widget.roundNum}:",
+                style: const TextStyle(
+                  fontSize: 35,
+                  fontFamily: "Rubik",
+                  color: Colors.black
+                ),
+              ),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                    _roundDescription,
+                    style: const TextStyle(
+                      fontFamily: "Rubik",
+                      fontSize: 22.5, // Maximum/ideal size
+                      color: Colors.black
+                    )
+                ),
+              )
+            ],
+          ),
+        ),
+        body: Container(
+            margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+            child: ListView.builder(
+              itemCount: GameManager.getNumPlayers() + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == GameManager.getNumPlayers()) {
+                    return Row(
+                      children: [
+                        Expanded(
+                          flex: 80,
+                          child: SizedBox(
+                            height: 60,
+                            child: ElevatedButton(
+                                child: const Text(
+                                  "Continue",
+                                  style: TextStyle(
+                                    fontSize: 35,
+                                    fontFamily: "Rubik",
+                                    color: Colors.black,
+                                  )
+                              ),
+                              onPressed: () {
+                                try {
+                                  bool correctScores = GameManager.validateScores(widget.roundNum, _controllers);
 
-                                if (correctScores) {
-                                  // the scores are good, accept them and then go to the next round
-                                  GameManager.acceptScores(widget.roundNum, _controllers);
-                                  if (widget.roundNum < 7) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => RoundScoringPage(
-                                      roundNum: widget.roundNum + 1
-                                    ))
-                                  );
-                                  } else {
-                                    // Calculate final scores and go to the scoring page
-                                    GameManager.calculateWinner();
+                                  if (correctScores) {
+                                    // the scores are good, accept them and then go to the next round
+                                    GameManager.acceptScores(widget.roundNum, _controllers);
+                                    if (widget.roundNum < 7) {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => const FinalScoringPage())
+                                      MaterialPageRoute(builder: (context) => RoundScoringPage(
+                                        roundNum: widget.roundNum + 1
+                                      ))
                                     );
+                                    } else {
+                                      // Calculate final scores and go to the scoring page
+                                      GameManager.calculateWinner();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const FinalScoringPage())
+                                      );
+                                    }
                                   }
+                                } on InvalidScoreSumException catch (e) {
+                                  showErrorDialog(
+                                      "The scores should add to ${e.targetSum}, but they add to ${e.currentSum}."
+                                  );
+                                } on NegativeScoreException catch (e) {
+                                  showErrorDialog(
+                                      "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score should not be negative!"
+                                  );
+                                } on InvalidIndividualScoreException catch (e) {
+                                  showErrorDialog(
+                                      "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score is invalid!"
+                                  );
                                 }
-                              } on InvalidScoreSumException catch (e) {
-                                showErrorDialog(
-                                    "The scores should add to ${e.targetSum}, but they add to ${e.currentSum}."
-                                );
-                              } on NegativeScoreException catch (e) {
-                                showErrorDialog(
-                                    "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score should not be negative!"
-                                );
-                              } on InvalidIndividualScoreException catch (e) {
-                                showErrorDialog(
-                                    "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score is invalid!"
-                                );
                               }
+                            )
+                          ),
+                        ),
+                        Expanded(
+                          flex: 20,
+                          child: IconButton(
+                            icon:
+                              Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.help_sharp)
+                            ),
+                            iconSize: 45,
+                            color: const Color.fromARGB(255, 77, 77, 255),
+                            tooltip: "Help",
+                            onPressed: () {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  scrollable: true,
+                                  title: const Text(
+                                    "Scoring Help",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      fontFamily: "Rubik",
+                                    )
+                                  ),
+                                  content: Text(
+                                    _scoringHelpDescription,
+                                    style: const TextStyle(
+                                      fontSize: 25,
+                                    )
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context, "OK"),
+                                      child: const Text(
+                                        "OK",
+                                        style: TextStyle(fontSize: 20)
+                                      ),
+                                    )
+                                  ],
+                                )
+                              );
                             }
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                else {
+                  return Container(
+                    height: 75,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      border: Border.all(color: Colors.black, width: 2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 60,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8, right: 8),
+                            child: FittedBox(
+                              fit: BoxFit.fill,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                  "${GameManager.getPlayerName(index)}'s score:",
+                                  textAlign: TextAlign.right,
+                                  style: const TextStyle(
+                                    fontSize: 22.5,
+                                  )
+                              ),
+                            ),
                           )
                         ),
-                      ),
-                      Expanded(
-                        flex: 20,
-                        child: IconButton(
-                          icon: const Icon(Icons.help),
-                          iconSize: 45,
-                          color: const Color.fromARGB(255, 77, 77, 255),
-                          tooltip: "Help",
-                          onPressed: () {
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                scrollable: true,
-                                title: const Text(
-                                  "Scoring Help",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontFamily: "Rubik",
-                                  )
+                        Expanded(
+                          flex: 40,
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                top: 10, bottom: 10, right: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black, width: 1.5),
+                              color: Colors.white,
+                            ),
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 5),
+                              child: TextField(
+                                controller: _controllers[index],
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  hintText: "0 points",
                                 ),
-                                content: Text(
-                                  _scoringHelpDescription,
-                                  style: const TextStyle(
-                                    fontSize: 25,
-                                  )
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context, "OK"),
-                                    child: const Text(
-                                      "OK",
-                                      style: TextStyle(fontSize: 20)
-                                    ),
-                                  )
-                                ],
-                              )
-                            );
-                          }
-                        ),
-                      )
-                    ],
+                                style: const TextStyle(fontSize: 22.5),
+                              ),
+                            ),
+                          )
+                        )
+                      ],
+                    ),
                   );
                 }
-              else {
-                return Container(
-                  height: 75,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    border: Border.all(color: Colors.black, width: 2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  margin: const EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 60,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                                "${GameManager.getPlayerName(index)}'s score:",
-                                textAlign: TextAlign.right,
-                                style: const TextStyle(
-                                  fontSize: 22.5,
-                                )
-                            ),
-                          ),
-                        )
-                      ),
-                      Expanded(
-                        flex: 40,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 10, bottom: 10, right: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 1.5),
-                            color: Colors.white,
-                          ),
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            child: TextField(
-                              controller: _controllers[index],
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                hintText: "0 points",
-                              ),
-                              style: const TextStyle(fontSize: 22.5),
-                            ),
-                          ),
-                        )
-                      )
-                    ],
-                  ),
-                );
               }
-            }
-          )
+            )
+        ),
       ),
     );
   }

@@ -37,59 +37,68 @@ class _SetupInstructionPageState extends State<SetupInstructionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Setup (${GameManager.getNumPlayers()} players)",
-          style: const TextStyle(
-            fontSize: 30,
-            color: Colors.black,
-            fontFamily: "Rubik",
-          )
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Salad.jpg'),
+          fit: BoxFit.cover,
         ),
-        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const Spacer(),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-                _getInstructions(),
-                style: const TextStyle(
-                  fontSize: 35,
-                ),
-            ),
+      child: Scaffold(
+        backgroundColor: Color.fromARGB(75, 255, 255, 255),
+        appBar: AppBar(
+          title: Text(
+            "Setup (${GameManager.getNumPlayers()} players)",
+            style: const TextStyle(
+              fontSize: 30,
+              color: Colors.black,
+              fontFamily: "Rubik",
+            )
           ),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-                  height: 100,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(
-                        fontSize: 50,
-                        color: Colors.black,
-                        fontFamily: "Rubik"
-                      )
+          centerTitle: true,
+        ),
+        body: Column(
+          children: [
+            const Spacer(),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                  _getInstructions(),
+                  style: const TextStyle(
+                    fontSize: 35,
+                  ),
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                    height: 100,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                      child: const Text(
+                        "Continue",
+                        style: TextStyle(
+                          fontSize: 50,
+                          color: Colors.black,
+                          fontFamily: "Rubik"
+                        )
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const NameEntryPage())
+                        );
+                      }
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const NameEntryPage())
-                      );
-                    }
                   ),
                 ),
-              ),
-            ],
-          ),
-          const Spacer()
-        ],
+              ],
+            ),
+            const Spacer()
+          ],
+        ),
       ),
     );
   }

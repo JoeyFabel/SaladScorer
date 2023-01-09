@@ -12,50 +12,59 @@ class PlayerSelectionPage extends StatefulWidget {
 class _PlayerSelectionPageState extends State<PlayerSelectionPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "How many players?",
-          style: TextStyle(
-            fontSize: 35,
-            color: Colors.black,
-            fontFamily: "Rubik",
-          )
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Salad.jpg'),
+          fit: BoxFit.cover,
         ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
       ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(vertical: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (int i = 3; i <= 10; i++) Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                width: double.infinity,
-                child: ElevatedButton(
-                  child: Text(
-                      "$i players",
-                      style: const TextStyle(
-                        fontSize: 30,
-                        color: Colors.black
-                      )
-                  ),
-                  onPressed: () {
-                    // Initialize and create the GameManager singleton
-                    GameManager.initializeGame(i);
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text(
+            "How many players?",
+            style: TextStyle(
+              fontSize: 35,
+              color: Colors.black,
+              fontFamily: "Rubik",
+            )
+          ),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
+        body: Container(
+          margin: const EdgeInsets.symmetric(vertical: 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (int i = 3; i <= 10; i++) Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    child: Text(
+                        "$i players",
+                        style: const TextStyle(
+                          fontSize: 30,
+                          color: Colors.black
+                        )
+                    ),
+                    onPressed: () {
+                      // Initialize and create the GameManager singleton
+                      GameManager.initializeGame(i);
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SetupInstructionPage())
-                    );
-                  },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SetupInstructionPage())
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
