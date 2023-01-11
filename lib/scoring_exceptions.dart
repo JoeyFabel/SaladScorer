@@ -22,3 +22,12 @@ class InvalidIndividualScoreException with Exception
 
   InvalidIndividualScoreException(this.offendingScoreIndex);
 }
+
+// In round 6, there might not be the correct number of negative scores
+class NotEnoughNegativesScoreException with Exception
+{
+  int desiredNegatives;
+  int currentNegatives;
+
+  NotEnoughNegativesScoreException(this.desiredNegatives, this.currentNegatives);
+}

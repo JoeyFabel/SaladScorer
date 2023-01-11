@@ -60,12 +60,21 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
               GameManager.acceptScores(widget.roundNum, _controllers);
 
               // Go to the next round
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RoundScoringPage(
-                      roundNum: widget.roundNum + 1
-                  ))
-              );
+              if (widget.roundNum < 7) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RoundScoringPage(
+                        roundNum: widget.roundNum + 1
+                    ))
+                );
+              } else {
+                // Calculate final scores and go to the scoring page
+                GameManager.calculateWinner();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const FinalScoringPage())
+                );
+              }
             },
             child: const Text(
               "Continue anyway",
@@ -179,7 +188,7 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                                   }
                                 } on InvalidScoreSumException catch (e) {
                                   showErrorDialog(
-                                      "The scores should add to ${e.targetSum}, but they add to ${e.currentSum}."
+                                      "The scores should add to ${e.targetSum}, but they add to ${e.currentSum}!"
                                   );
                                 } on NegativeScoreException catch (e) {
                                   showErrorDialog(
@@ -188,6 +197,10 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                                 } on InvalidIndividualScoreException catch (e) {
                                   showErrorDialog(
                                       "${GameManager.getPlayerName(e.offendingScoreIndex)}'s score is invalid!"
+                                  );
+                                } on NotEnoughNegativesScoreException catch (e) {
+                                  showErrorDialog(
+                                    "There should be ${e.desiredNegatives} negative score${e.desiredNegatives > 1 ? 's' : ''}, but there are ${e.currentNegatives}!"
                                   );
                                 }
                               }

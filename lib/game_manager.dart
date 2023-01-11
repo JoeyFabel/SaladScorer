@@ -191,6 +191,9 @@ class GameManager {
 
         if (numNegatives > (useTwoDecks() ? 2 : 1)) throw NegativeScoreException(i);
       }
+
+      // Make sure there is the right number of negative scores
+      if (numNegatives != (useTwoDecks() ? 2 : 1)) throw NotEnoughNegativesScoreException(useTwoDecks() ? 2: 1, numNegatives);
     }
 
     // At this point the scores have the correct total. But there could still be errors!
