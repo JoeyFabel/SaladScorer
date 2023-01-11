@@ -90,6 +90,20 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
     );
   }
 
+  String getCurrentScores() {
+    String scoreString = "";
+
+    // Get each players score and add it to the scoreString
+    for (int i = 0; i < GameManager.getNumPlayers(); i++) {
+      scoreString += GameManager.getPlayerName(i);
+      scoreString += ": ";
+      scoreString += GameManager.getFinalScore(i).toString();
+      scoreString += "\n";
+    }
+
+    return scoreString;
+  }
+
   @override
   void initState()
   {
@@ -143,7 +157,7 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
           ),
         ),
         body: Container(
-            margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+            margin: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
             child: ListView.builder(
               itemCount: GameManager.getNumPlayers() + 1,
               itemBuilder: (BuildContext context, int index) {
@@ -151,7 +165,7 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                     return Row(
                       children: [
                         Expanded(
-                          flex: 80,
+                          flex: 60,
                           child: SizedBox(
                             height: 60,
                             child: ElevatedButton(
@@ -212,22 +226,22 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                           child: IconButton(
                             icon:
                               Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.help_sharp)
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.info)
                             ),
                             iconSize: 45,
                             color: const Color.fromARGB(255, 77, 77, 255),
-                            tooltip: "Help",
+                            tooltip: "View Scores",
                             onPressed: () {
                               showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
                                   scrollable: true,
                                   title: const Text(
-                                    "Scoring Help",
+                                    "Current Scores",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 30,
@@ -235,7 +249,7 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                                     )
                                   ),
                                   content: Text(
-                                    _scoringHelpDescription,
+                                    getCurrentScores(),
                                     style: const TextStyle(
                                       fontSize: 25,
                                     )
@@ -252,6 +266,53 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                                 )
                               );
                             }
+                          ),
+                        ),
+                        Expanded(
+                          flex: 20,
+                          child: IconButton(
+                              icon:
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(Icons.help_sharp)
+                                ),
+                              iconSize: 45,
+                              color: const Color.fromARGB(255, 77, 77, 255),
+                              tooltip: "Help",
+                              onPressed: () {
+                                showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) => AlertDialog(
+                                      scrollable: true,
+                                      title: const Text(
+                                          "Scoring Help",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontFamily: "Rubik",
+                                          )
+                                      ),
+                                      content: Text(
+                                          _scoringHelpDescription,
+                                          style: const TextStyle(
+                                            fontSize: 25,
+                                          )
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context, "OK"),
+                                          child: const Text(
+                                              "OK",
+                                              style: TextStyle(fontSize: 20)
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                );
+                              }
                           ),
                         )
                       ],
