@@ -15,12 +15,8 @@ class RoundScoringPage extends StatefulWidget {
 class _RoundScoringPageState extends State<RoundScoringPage> {
 
   final List<TextEditingController> _controllers = []; // This list allows reading of player names
-  // int _roundNum = 3;
-   late final String _roundDescription;
-   late final String _scoringHelpDescription;
-  // String _scoringHelpDescription = "For this round, every King of Spades is worth 100 points."
-  //     "None of the other cards matter.\n\nFor example, if you end the round with the King of Spades "
-  //     "you will get 100 points.";
+  late final String _roundDescription;
+  late final String _scoringHelpDescription;
 
   void showErrorDialog(String errorMessage)
   {
