@@ -186,14 +186,20 @@ class GameManager {
     } else {
       // It is round 6, make sure there is 1 negative score per deck
       int numNegatives = 0;
+      int numPositives = 0;
       for (int i = 0; i < scores.length; i++) {
-        if (scores[i] < 0) numNegatives++;
+        if (scores[i] < 0) {
+          numNegatives++;
+        } else if (scores[i] > 0) {
+          numPositives++;
+        }
 
         if (numNegatives > (useTwoDecks() ? 2 : 1)) throw NegativeScoreException(i);
       }
 
       // Make sure there is the right number of negative scores
       if (numNegatives != (useTwoDecks() ? 2 : 1)) throw NotEnoughNegativesScoreException(useTwoDecks() ? 2: 1, numNegatives);
+      if (numPositives != (useTwoDecks() ? 2 : 1)) throw NotEnoughPositiveScoreException(useTwoDecks() ? 2 : 1, numPositives);
     }
 
     // At this point the scores have the correct total. But there could still be errors!

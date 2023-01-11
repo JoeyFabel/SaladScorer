@@ -212,6 +212,10 @@ class _RoundScoringPageState extends State<RoundScoringPage> {
                                   showErrorDialog(
                                     "There should be ${e.desiredNegatives} negative score${e.desiredNegatives > 1 ? 's' : ''}, but there are ${e.currentNegatives}!"
                                   );
+                                } on NotEnoughPositiveScoreException catch (e) {
+                                  showErrorDialog(
+                                    "There should be ${e.desiredPositives} positive score${e.desiredPositives > 0 ? 's' : ''}, but there are ${e.currentPositives}!"
+                                  );
                                 }
                               }
                             )

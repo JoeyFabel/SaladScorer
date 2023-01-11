@@ -31,3 +31,12 @@ class NotEnoughNegativesScoreException with Exception
 
   NotEnoughNegativesScoreException(this.desiredNegatives, this.currentNegatives);
 }
+
+// In round 6, there might not be the correct number of positive scores
+class NotEnoughPositiveScoreException with Exception
+{
+  int desiredPositives;
+  int currentPositives;
+
+  NotEnoughPositiveScoreException(this.desiredPositives, this.currentPositives);
+}
