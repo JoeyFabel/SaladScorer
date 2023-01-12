@@ -43,7 +43,7 @@ class _HowToPlayPageState extends State<HowToPlayPage> {
               style: fontStyle,
             children: [
               TextSpan(
-                  text: "his is a trick taking card game. If you don't know what that is, ",
+                  text: "This is a trick taking card game. If you don't know what that is, ",
                   style: fontStyle
               ),
               TextSpan(
