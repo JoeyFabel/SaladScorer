@@ -62,7 +62,7 @@ class GameManager {
         "On your turn you can play one card from your hand. If there is nothing on the table, "
         "you can only play a 7. If there are cards on the table you can play a card of the same suit "
         "that is either directly above or below that card numerically. If you can't you must pass.\n"
-        "For example, if there is a 7 of Hearts on the table you can play a 6 of Hearts, a 7 of Hearts, "
+        "For example, if there is a 7 of Hearts on the table you can play a 6 of Hearts, an 8 of Hearts, "
         "or another 7 of any suit.\nAces are played above Kings.\n\n"
         "The first person to run out of cards loses 100 points, and the last person to run out of cards "
         "gains 100 points.",
@@ -70,7 +70,7 @@ class GameManager {
         "On your turn you can play one card from your hand. If there is nothing on the table, "
         "you can only play a 7. If there are cards on the table you can play a card of the same suit "
         "that is either directly above or below that card numerically. If you can't you must pass\n"
-        "For example, if there is a 7 of Hearts on the table you can play a 6 of Hearts, a 7 of Hearts, "
+        "For example, if there is a 7 of Hearts on the table you can play a 6 of Hearts, an 8 of Hearts, "
         "or another 7 of any suit.\nAces are played above Kings.\n\n"
         "The first two people to run out of cards lose 100 points, and the last two people "
         "to run out of cards gain 100 points.",
