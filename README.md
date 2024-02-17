@@ -2,6 +2,8 @@
 
 A scoring app for the card game Salad.
 
+The app is published to the Google Play store [here](https://play.google.com/store/apps/details?id=com.fabelworks.salad_scorer).
+
 ## Usage
 
 From the main screen you have two options:
